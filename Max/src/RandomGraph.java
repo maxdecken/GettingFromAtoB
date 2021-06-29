@@ -25,7 +25,9 @@ public class RandomGraph {
     private void generateRandomEdges(int count){
         Random r = new Random();
         for(int i = 0; i < count; i++){
-            weightedGraph.addEdge(r.nextInt(vert), r.nextInt(vert), r.nextInt(10)+1);
+            Node n1 = weightedGraph.getNode(r.nextInt(vert));
+            Node n2 = weightedGraph.getNode(r.nextInt(vert));
+            weightedGraph.addEdge(n1, n2, r.nextInt(10)+1);
         }
     }
 
