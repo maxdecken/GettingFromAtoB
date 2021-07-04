@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class WeightedGraph implements Graph{
 
@@ -165,5 +166,15 @@ public class WeightedGraph implements Graph{
         }
         way = way + end.name;
         return way + " (cost:"+(int) dis[end.index]+")";
+    }
+
+    public String getRandomShortestPath(){
+        Random r = new Random();
+        return findShortestPath(getNode(r.nextInt(nodeCount)), getNode(r.nextInt(nodeCount)));
+    }
+
+    public String getRandomCheapestPath(){
+        Random r = new Random();
+        return findCheapestPath(getNode(r.nextInt(nodeCount)), getNode(r.nextInt(nodeCount)));
     }
 }
