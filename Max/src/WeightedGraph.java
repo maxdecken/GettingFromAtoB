@@ -55,7 +55,115 @@ public class WeightedGraph implements Graph{
     }
 
     @Override
-    public void findShortestPath(Node start, Node end) {
+    public String findShortestPath(Node start, Node end) {
+        //same algorithms as for findCheapestPath (exercise 4),
+        // but weight ad is always one, since weight of edges does not count.
+        String way = "";
 
+        double dis[] = new double[nodeCount];
+        double prev[] = new double[nodeCount];
+        boolean explored[] = new boolean[nodeCount];
+
+        for (int i = 0; i < nodeCount; i++) {
+            dis[i] = Double.POSITIVE_INFINITY;
+            prev[i] = -1;
+            explored[i] =false;
+        }
+        dis[start.index] = 0;
+
+        int current = start.index;
+
+        while (!explored[end.index]){
+            way = way + getNode(current).name + "-" ;
+            explored[current] = true;
+            int v = 0;
+            double shortest = Double.POSITIVE_INFINITY;
+            for (int j = 0; j <nodeCount ; j++) {
+                if(matrix[current][j] != null && !explored[j]) {
+                    dis[j] = 1 + dis[current];
+                    if (shortest > dis[j]) {
+                        //v = vertex with shortest way to previous node
+                        v = nodes[j].index;
+                        shortest = dis[j];
+                    }
+                }
+            }
+            explored[v] = true;
+            prev[v] = current;
+            shortest = Double.POSITIVE_INFINITY;
+            int next = -1;
+            for (int j = 0; j <nodeCount ; j++){
+                if(matrix[v][j] != null && !explored[j]) {
+                    if(dis[j] > dis[v] + 1){
+                        dis[j] = dis[v] + 1;
+                    }
+                    if (shortest > dis[j]) {
+                        //v = vertex with shortest way to previous node
+                        next = nodes[j].index;
+                        shortest = dis[j];
+                    }
+                }
+            }
+            current = next;
+            if(current == end.index){
+                break;
+            }
+        }
+        way = way + end.name;
+        return way;
+    }
+
+    public String findCheapestPath(Node start, Node end) {
+
+        String way = "";
+
+        double dis[] = new double[nodeCount];
+        double prev[] = new double[nodeCount];
+        boolean explored[] = new boolean[nodeCount];
+
+        for (int i = 0; i < nodeCount; i++) {
+            dis[i] = Double.POSITIVE_INFINITY;
+            prev[i] = -1;
+            explored[i] =false;
+        }
+        dis[start.index] = 0;
+
+        int current = start.index;
+
+        while (!explored[end.index]){
+            way = way + getNode(current).name + "-" ;
+            explored[current] = true;
+            int v = -1;
+            double shortest = Double.POSITIVE_INFINITY;
+            for (int j = 0; j <nodeCount ; j++) {
+                if(matrix[current][j] != null && !explored[j]) {
+                    dis[j] = matrix[current][j].weight + dis[current];
+                    if (shortest > dis[j]) {
+                        //v = vertex with shortest way to previous node
+                        v = nodes[j].index;
+                        shortest = dis[j];
+                    }
+                }
+            }
+            explored[v] = true;
+            prev[v] = current;
+            shortest = Double.POSITIVE_INFINITY;
+            int next = -1;
+            for (int j = 0; j <nodeCount ; j++){
+                if(matrix[v][j] != null && !explored[j]) {
+                    if(dis[j] > dis[v] + matrix[v][j].weight){
+                        dis[j] = dis[v] + matrix[v][j].weight;
+                    }
+                    if (shortest > dis[j]) {
+                        //v = vertex with shortest way to previous node
+                        next = nodes[j].index;
+                        shortest = dis[j];
+                    }
+                }
+            }
+            current = next;
+        }
+        way = way + end.name;
+        return way + " (cost:"+(int) dis[end.index]+")";
     }
 }

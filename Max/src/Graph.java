@@ -4,6 +4,6 @@ public interface Graph {
 
     void printGraph();
 
-    void findShortestPath(Node start, Node end);
+    String findShortestPath(Node start, Node end);
 
 }
